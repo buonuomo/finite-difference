@@ -1,14 +1,11 @@
-
 module ForwardDiff where
-
 
 import Text.PrettyPrint.Boxes
 import Data.List (transpose)
 
-
 -- Take the forward difference of a list
 diff :: Num a => [a] -> [a]
-diff xs = zipWith (-) (tail xs) xs
+diff = zipWith (-) <$> tail <*> id
 
 -- Take the forward sum of a list (like integrating)
 integ :: Num a => [a] -> [a]
@@ -24,7 +21,7 @@ intTable = iterate integ
 
 -- Undifferentiates the first column of a table into the next column of the 'original' table
 undiff :: Num a => [a] -> [a]
-undiff xs = zipWith (+) (tail xs) xs
+undiff = zipWith (+) <$> tail <*> id
 
 -- Constructs a diff table from the first column
 undiffTable :: Num a => [a] -> [[a]]
