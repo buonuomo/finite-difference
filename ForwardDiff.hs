@@ -10,12 +10,28 @@ import Data.List (transpose)
 diff :: Num a => [a] -> [a]
 diff xs = zipWith (-) (tail xs) xs
 
--- Given a starter list, construct the table
-analyze :: Num a => [a] -> [[a]]
-analyze = iterate diff 
+-- Take the forward sum of a list (like integrating)
+integ :: Num a => [a] -> [a]
+integ = scanl1 (+)
 
--- Take a h x w rectangle from the table
-takeTable :: Int -> Int -> [[a]] -> [[a]] 
+-- Given a starter list, construct the difference table
+diffTable :: Num a => [a] -> [[a]]
+diffTable = iterate diff 
+
+-- given a starter list, construct integration table
+intTable :: Num a => [a] -> [[a]]
+intTable = iterate integ
+
+-- Undifferentiates the first column of a table into the next column of the 'original' table
+undiff :: Num a => [a] -> [a]
+undiff xs = zipWith (+) (tail xs) xs
+
+-- Constructs a diff table from the first column
+undiffTable :: Num a => [a] -> [[a]]
+undiffTable = transpose . iterate undiff
+
+-- Take an h by w rectangle from the table
+takeTable :: Num a => Int -> Int -> [[a]] -> [[a]] 
 takeTable h w = take h . map (take w) 
 
 -- newtype wrapper for pretty printing of tables
